@@ -1,8 +1,37 @@
 //Woo Choi
 //gistScript.js
 
+/* not required... couldn't get through.
+var Python = false;
+var JSON = false;
+var JS = false;
+var SQL = false;
+
+function langPyth(check){
+	if (check.checked == true){lPython = true;}
+	else {Python == false};	
+}
+
+function langJSON(check){
+	if (check.checked == true){lJSON = true;}
+	else {JSON == false};	
+}
+
+function langJS(check){
+	if (check.checked == true){lJS = true;}
+	else {JS == false};	
+}
+
+function langSQL(check){
+	if (check.checked == true){lSQL = true;}
+	else {SQL == false};	
+}
+*/
+
+
 function getList() {
   //clean the page if there are stuff already on it
+  //became unnecessary due to few code in the printRes(), but left it 'cause why not.
   cleanPage();
   
   
@@ -13,8 +42,26 @@ function getList() {
 
   //pages
   var pageNum = document.getElementById("pgSelect").value;
-  //setting up page object to pass onto urlStringify
-  var url = "https://api.github.com/gists/public" + '?' + pageNum;
+  var fileNum
+  //deciding the number of files to show on page.
+  if (pageNum == 1)
+    fileNum = 30;
+  else if (pageNum == 2)
+    fileNum = 60;
+  else if (pageNum == 3)
+    fileNum = 90;
+  else if (pageNum == 4)
+    fileNum = 120;
+  else 
+    fileNum = 150;
+	
+  //ignore
+  //printing number of files requested   took it out.
+  //document.getElementById("fileNumber").innerHTML += "<p>" + fileNum + "<\p>";
+  
+  
+  //setting up url to show the # of files requested.
+  var url = "https://api.github.com/gists/public?per_page=" + fileNum;
 
   //testing
   document.getElementById("results").innerHTML += "<p>" + "INITIALIZING :P" + "<\p>";
@@ -26,7 +73,7 @@ function getList() {
 		printRes(result);
 	  }
   }
- // document.getElementById("favorites").innerHTML += "<p>" + result[0].description + "<\p>";
+ // document.getElementById("favorites").innerHTML += "<p>" + result[0].description + "<\p>"; //ignore
   req.open("GET", url);
   req.send();
   
@@ -39,13 +86,19 @@ function getList() {
 //Help from Millerla
 function printRes(result){
   var resultNum = result.length;
-  var resultList = document.getElementById("results")
-  var favList = document.getElementById("favorites")
-  //favList.innerHTML += "<p>" + result[0].html_url + "<\p>";
-  
+  //var fileNumList = document.getElementById("fileNumber");      ignore
+  var resultList = document.getElementById("results");
+  var favList = document.getElementById("favorites");
+  //favList.innerHTML += "<p>" + result[0].html_url + "<\p>";     ignore
   var ul;
   var btn;
   var description; 
+  
+ //ignore
+ // for (var i= fileNumList.childNodes.length -1; i >=0; i--){
+ //   fileNumList.removeChild(fileNumList.childNodes[i]);
+  //}
+   
   
   //refresh
   for (var i= resultList.childNodes.length -1; i >= 0; i--){
@@ -71,19 +124,20 @@ function printRes(result){
 	btn = document.createElement("button");
 	btn.innerHTML = "add/remove";
 	btn.setAttribute("address", result[i].html_url);
+	//if result is in local storage
 	if (localStorage.getItem(result[i].html_url)){
 	  //remove from favorite once btn clicked
 	  btn.onclick = function() {
 	    
 	    localStorage.removeItem(this.getAttribute("address"));  
-		//refresh
+		//reprint 
 		printRes(result);
 	  }
 	} else {
 	  btn.onclick = function() {
 		//adds to favorite and set local storage
 	    localStorage.setItem(this.getAttribute("address"), this.getAttribute("address"));
-	    //refresh
+	    //reprint
 		printRes(result);
 	  }
 	}
@@ -101,7 +155,7 @@ function printRes(result){
   }
   
 }
-
+//cleaning page, decided to use something else more refined under printRes()
 function cleanPage(){
   var x = document.getElementById("results");
   while (x.hasChildNodes()){
