@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="UTF-8">
+	<script src='gistScript.js'></script>
 	<title>Choi a3 p2</title>
-	
   </head>
 <body>
 	<h3>Number of result pages to display:</h3>
@@ -14,13 +14,16 @@
 		<option value='4'>4</option>
 		<option value='5'>5</option>
 	</select>
+	<!-- NO NEED: WHEW
 	<h3>Select from:</h3>
 	<form>
+
 		<input type='checkbox' name='language' value='Python' onClick=''>Python
 		<input type='checkbox' name='language' value='JSON' onClick=''>JSON
 		<input type='checkbox' name='language' value='JavaScript' onClick=''>JavaScript
 		<input type='checkbox' name='language' value='SQL' onClick=''>SQL
-		<input type='button' name='submit' onclick='' value='Search'>
+		-->
+		<input type='button' name='submit' onclick='getList()' value='Search'>
 	</form>
 	<div id='gistResults'></div>
 	<h3>Favorites:</h3>
